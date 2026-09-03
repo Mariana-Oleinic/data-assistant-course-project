@@ -70,4 +70,3 @@ class OfflineProvider(LLMProvider):
         message = f"Offline result: {query_result}"
         for word in message.split():
             yield word + " "
-

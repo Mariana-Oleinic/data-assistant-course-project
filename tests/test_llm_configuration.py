@@ -4,6 +4,7 @@ from pydantic import ValidationError
 from data_assistant.config import Settings
 from data_assistant.llm.factory import create_llm_provider
 from data_assistant.llm.models import OperationKind
+from data_assistant.observability import create_langfuse_client
 
 
 def test_offline_is_default_and_needs_no_credentials() -> None:
@@ -13,6 +14,17 @@ def test_offline_is_default_and_needs_no_credentials() -> None:
     assert settings.llm_mode == "offline"
     assert settings.allow_paid_llm is False
     assert provider.name == "Offline"
+
+
+def test_langfuse_stays_disabled_even_when_keys_exist_without_opt_in() -> None:
+    settings = Settings(
+        _env_file=None,
+        langfuse_public_key="test-public",
+        langfuse_secret_key="test-secret",
+    )
+
+    assert settings.langfuse_enabled is False
+    assert create_langfuse_client(settings) is None
 
 
 def test_openai_mode_requires_explicit_paid_opt_in() -> None:
@@ -52,4 +64,3 @@ def test_offline_provider_builds_bounded_select() -> None:
 
     assert plan.safe_to_execute is True
     assert plan.sql == 'SELECT * FROM "customers" LIMIT 200'
-

@@ -17,4 +17,3 @@ def create_llm_provider(settings: Settings) -> LLMProvider:
         api_key=settings.openai_api_key.get_secret_value(),
         model=settings.openai_model,
     )
-

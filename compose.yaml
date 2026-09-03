@@ -1,0 +1,32 @@
+services:
+  db:
+    image: postgres:17-alpine
+    environment:
+      POSTGRES_DB: data_assistant
+      POSTGRES_USER: data_assistant
+      POSTGRES_PASSWORD: data_assistant
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U data_assistant -d data_assistant"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+  app:
+    build: .
+    environment:
+      LLM_MODE: offline
+      ALLOW_PAID_LLM: "false"
+      DATABASE_URL: postgresql+psycopg://data_assistant:data_assistant@db:5432/data_assistant
+    ports:
+      - "8501:8501"
+    depends_on:
+      db:
+        condition: service_healthy
+
+volumes:
+  postgres_data:
+

@@ -32,4 +32,3 @@ class SqlQueryPlan(BaseModel):
     explanation: str
     referenced_tables: list[str] = Field(default_factory=list)
     safe_to_execute: bool = False
-

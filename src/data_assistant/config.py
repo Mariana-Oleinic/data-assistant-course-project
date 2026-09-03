@@ -22,13 +22,14 @@ class Settings(BaseSettings):
     openai_api_key: SecretStr | None = None
     openai_model: str = "gpt-5.4-mini"
 
+    enable_langfuse: bool = False
     langfuse_public_key: str | None = None
     langfuse_secret_key: SecretStr | None = None
     langfuse_base_url: str = "https://cloud.langfuse.com"
     langfuse_tracing_environment: str = "development"
 
     database_url: str = (
-        "postgresql+psycopg://data_assistant:data_assistant@db:5432/data_assistant"
+        "postgresql+psycopg://data_assistant:data_assistant@localhost:5432/data_assistant"
     )
 
     @model_validator(mode="after")
@@ -45,7 +46,8 @@ class Settings(BaseSettings):
     @property
     def langfuse_enabled(self) -> bool:
         return bool(
-            self.langfuse_public_key
+            self.enable_langfuse
+            and self.langfuse_public_key
             and self.langfuse_secret_key
             and self.langfuse_secret_key.get_secret_value().strip()
         )
@@ -54,4 +56,3 @@ class Settings(BaseSettings):
 @lru_cache
 def get_settings() -> Settings:
     return Settings()
-

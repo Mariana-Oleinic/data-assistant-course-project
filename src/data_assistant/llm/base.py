@@ -23,4 +23,3 @@ class LLMProvider(ABC):
     @abstractmethod
     def stream_answer(self, *, question: str, query_result: str) -> Iterator[str]:
         raise NotImplementedError
-

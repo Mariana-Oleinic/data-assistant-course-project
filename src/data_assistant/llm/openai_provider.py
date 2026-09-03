@@ -56,4 +56,3 @@ class OpenAIProvider(LLMProvider):
             input=f"Question: {question}\n\nQuery result:\n{query_result}",
         ) as stream:
             yield from stream.text_deltas
-
