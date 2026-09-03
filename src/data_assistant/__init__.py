@@ -1,0 +1,2 @@
+"""Data Assistant application package."""
+

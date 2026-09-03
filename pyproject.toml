@@ -1,0 +1,43 @@
+[build-system]
+requires = ["hatchling>=1.27"]
+build-backend = "hatchling.build"
+
+[project]
+name = "data-assistant"
+version = "0.1.0"
+description = "Offline-first synthetic data generator and conversational SQL assistant"
+requires-python = ">=3.11"
+dependencies = [
+  "pydantic>=2.10,<3",
+  "pydantic-settings>=2.7,<3",
+]
+
+[project.optional-dependencies]
+app = [
+  "faker>=33,<40",
+  "pandas>=2.2,<4",
+  "plotly>=5.24,<7",
+  "psycopg[binary]>=3.2,<4",
+  "sqlalchemy>=2.0,<3",
+  "sqlglot>=26,<30",
+  "streamlit>=1.41,<2",
+]
+openai = ["openai>=2,<3"]
+observability = ["langfuse>=3,<5"]
+dev = [
+  "pytest>=8.3,<10",
+  "pytest-cov>=6,<8",
+  "ruff>=0.9,<1",
+]
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/data_assistant"]
+
+[tool.pytest.ini_options]
+pythonpath = ["src"]
+testpaths = ["tests"]
+
+[tool.ruff]
+line-length = 100
+target-version = "py311"
+
